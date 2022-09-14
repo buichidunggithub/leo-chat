@@ -6,6 +6,11 @@ import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios"
 import { registerRoute } from '../utils/APIRoutes';
+import { GoogleOutlined, FacebookOutlined } from '@ant-design/icons';
+import { auth } from "../firebase";
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -53,7 +58,7 @@ const Register = () => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  const handleValidation = () =>{
+  const handleValidation = () => {
     const {password, confirmPassword, username, email} = values;
     if(password!==confirmPassword){
       toast.error("Enter correct Confirm Password!", toastOptions);
@@ -69,8 +74,15 @@ const Register = () => {
       return false;
     }
     return true;
-    }
+  }
   
+  const handleSignUpWithGoogle = (e) => {
+
+  }
+
+  const handleSignUpWithFacebook = (e) => {
+  
+  }
 
   return (
     <>
@@ -85,6 +97,12 @@ const Register = () => {
           <input type="password" placeholder='Password' name='password' onChange={(e) => handleChange(e)} />
           <input type="password" placeholder='Confirm Password' name='confirmPassword' onChange={(e) => handleChange(e)} />
           <button type='submit' >Create User</button>
+          <div className="login-button google" onClick={(e) => handleSignUpWithGoogle(e)}>
+            <GoogleOutlined /> Sign up with Google
+          </div>
+          <div className="login-button facebook" onClick={(e) => handleSignUpWithFacebook(e)}>
+            <FacebookOutlined /> Sign up with Facebook
+          </div>
           <span>Already have an account? <Link to="/login">Login</Link>
           </span>
         </form>
@@ -159,6 +177,21 @@ const FormContainer = styled.div`
       text-decoration: none;
       font-weight: bold;
     }
+  }
+  .login-button {
+    cursor: pointer;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    display: inline-block;
+  }
+  .facebook {
+    background-color: #3b5998;
+  }
+  
+  .google {
+    background-color: #4285f4;
+    color: white;
   }
 `;
 export default Register

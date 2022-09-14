@@ -6,6 +6,11 @@ import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios"
 import { loginRoute } from '../utils/APIRoutes';
+import { GoogleOutlined, FacebookOutlined } from '@ant-design/icons';
+import { auth } from "../firebase";
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -31,8 +36,10 @@ const Login = () => {
   
 
   const handleSubmit = async (e) => {
+    console.log(e.target.username.value);
+    console.log(e.target.password.value);
     e.preventDefault();
-   if( handleValidation()){
+   if(handleValidation()){
     const {password,  username} = values;
     const {data} = await axios.post(loginRoute, {
       username,
@@ -51,7 +58,7 @@ const Login = () => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  const handleValidation = () =>{
+  const handleValidation = () => {
     const {password, username} = values;
     if(password ===  ""){
       toast.error("Password required!", toastOptions);
@@ -61,7 +68,27 @@ const Login = () => {
       return false;
     } 
     return true;
-    }
+  }
+
+  const handleSignInWithGoogle = (e) => {
+    auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then((result) => {
+      console.log('isNewUser', result.additionalUserInfo.isNewUser);
+      console.log('email', result.additionalUserInfo.profile.email);
+      console.log('id', result.additionalUserInfo.profile.id);
+      console.log('credential', result.credential);
+      console.log('accessToken', result.credential.accessToken);
+      console.log('idToken', result.credential.idToken);
+      console.log('result', result);
+      const credential = firebase.auth.GoogleAuthProvider.credential(result);
+      console.log(credential)
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
+  const handleSignInWithFacebook = (e) => {
+    auth.signInWithPopup(new firebase.auth.FacebookAuthProvider())
+  }
   
   return (
     <>
@@ -76,6 +103,12 @@ const Login = () => {
           <button type='submit' >Login</button>
           <span>Don't  have an account? <Link to="/register">Register</Link>
           </span>
+          <div className="login-button google" onClick={(e) => handleSignInWithGoogle(e)}>
+              <GoogleOutlined /> Sign in with Google
+          </div>
+          <div className="login-button facebook" onClick={(e) => handleSignInWithFacebook(e)}>
+              <FacebookOutlined /> Sign in with Facebook
+          </div>
         </form>
       </FormContainer>
       <ToastContainer />
@@ -148,6 +181,21 @@ const FormContainer = styled.div`
       text-decoration: none;
       font-weight: bold;
     }
+  }
+  .login-button {
+    cursor: pointer;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    display: inline-block;
+  }
+  .facebook {
+    background-color: #3b5998;
+  }
+  
+  .google {
+    background-color: #4285f4;
+    color: white;
   }
 `;
 export default Login
