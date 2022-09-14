@@ -1,7 +1,12 @@
 # leo-chat
 
 # Create database
-Create mongodb on https://cloud.mongodb.com/ then replace MONGO_URL in server/.env
+Create mongodb on https://cloud.mongodb.com/
+
+Create .env in folder "server" by the command touch .env <br/>
+.env file includes: <br/>
+PORT= <br/>
+MONGO_URL= <br/>
 
 # Start client
 cd client <br/>
