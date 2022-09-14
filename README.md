@@ -5,10 +5,10 @@ Create mongodb on https://cloud.mongodb.com/ then replace MONGO_URL in server/.e
 
 # Start client
 cd client <br/>
-npm i --save
-npm start
+npm i --save <br/>
+npm start <br/>
 
 # Start server
-cd server
-npm i --save
-npm start
+cd server <br/>
+npm i --save <br/>
+npm start <br/>
